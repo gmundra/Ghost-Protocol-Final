@@ -17,7 +17,7 @@ export function RevealText({
   const words = children.split(" ");
   return (
     <Tag ref={ref} className={className} style={{ display: "inline-block" }}>
-      {words.map((w: string, i: number) => (
+      {words.map((w, i) => (
         <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "top" }}>
           <motion.span
             style={{ display: "inline-block" }}
