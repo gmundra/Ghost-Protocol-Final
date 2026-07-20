@@ -10,14 +10,13 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { RevealText, FadeUp, CountUp, MagneticButton, Parallax } from "@/components/motion";
 import { ProductModal } from "@/components/ProductModal";
 import {
-  categories, products, stats, outcomes, audiences, testimonials, faqs,
+  products, stats, outcomes, audiences, testimonials, faqs,
   type Product,
 } from "@/data/content";
 
 export default function Index() {
   const [active, setActive] = useState<Product | null>(null);
 
-  // Adapt static Product to the shape ProductModal expects
   const modalProduct = active
     ? {
         id: active.id,
@@ -41,7 +40,6 @@ export default function Index() {
       <WhyScreens />
       <Mission />
       <Ecosystem />
-      <CategoriesRail />
       <FeaturedProducts onOpen={setActive} />
       <Outcomes />
       <WhoWeServe />
@@ -109,7 +107,7 @@ function WhyScreens() {
         <div className="md:col-span-7">
           <FadeUp delay={0.15}>
             <p className="text-xl leading-relaxed text-muted-foreground max-w-2xl">
-              The average child under twelve now spends more time in front of a glowing rectangle than sleeping. We don’t need alarm. We need alternatives — beautiful ones.
+              The average child under twelve now spends more time in front of a glowing rectangle than sleeping. We don't need alarm. We need alternatives — beautiful ones.
             </p>
           </FadeUp>
           <div className="mt-16 grid grid-cols-2 gap-y-14 gap-x-8">
@@ -217,7 +215,7 @@ function Ecosystem() {
           </FadeUp>
           <FadeUp delay={0.15} className="md:col-span-6">
             <p className="text-xl leading-relaxed text-muted-foreground max-w-lg">
-              We map every product to a specific corner of childhood development — because “educational” is not a marketing word, it’s a promise.
+              We map every product to a specific corner of childhood development — because "educational" is not a marketing word, it's a promise.
             </p>
             <ul className="mt-10 grid grid-cols-2 gap-4 text-sm">
               {skills.map((s) => (
@@ -234,49 +232,6 @@ function Ecosystem() {
 }
 
 /* ------------------------------------------------------------------ */
-/* CATEGORIES RAIL (scroll-driven horizontal)                            */
-/* ------------------------------------------------------------------ */
-function CategoriesRail() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-70%"]);
-
-  return (
-    <section id="categories" ref={ref} className="relative bg-foreground text-background" style={{ height: "300vh" }}>
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden grain">
-        <div className="container-x mb-10">
-          <div className="eyebrow mb-6" style={{ color: "rgba(255,255,255,0.6)" }}>04 · Product Categories</div>
-          <RevealText as="h2" className="display-2 block max-w-2xl">
-            Nine ways to hold a childhood.
-          </RevealText>
-        </div>
-        <motion.div style={{ x }} className="flex gap-8 pl-8 md:pl-16 will-change-transform">
-          {categories.map((c, idx) => (
-            <Link
-              to={`/drops?cat=${c.slug}`}
-              key={c.slug}
-              className="shrink-0 w-[75vw] md:w-[38vw] aspect-[4/5] rounded-3xl grain relative overflow-hidden group"
-              style={{ background: "linear-gradient(160deg, #2a1e14 0%, #1a1210 100%)" }}
-            >
-              <div className="absolute inset-0 flex items-center justify-center text-[16rem] font-display text-accent/30 group-hover:text-accent/50 transition-colors duration-700">
-                {c.glyph}
-              </div>
-              <div className="absolute bottom-0 inset-x-0 p-8">
-                <div className="text-3xl font-display text-background">{c.name}</div>
-                <p className="text-background/60 mt-2 max-w-xs">{c.blurb}</p>
-              </div>
-              <div className="absolute top-6 right-6 text-xs uppercase tracking-widest text-background/40">
-                {String(idx + 1).padStart(2, "0")}
-              </div>
-            </Link>
-          ))}
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* FEATURED PRODUCTS                                                     */
 /* ------------------------------------------------------------------ */
 function FeaturedProducts({ onOpen }: { onOpen: (p: Product) => void }) {
@@ -286,7 +241,7 @@ function FeaturedProducts({ onOpen }: { onOpen: (p: Product) => void }) {
       <div className="container-x">
         <div className="flex flex-wrap items-end justify-between gap-6 mb-16">
           <div className="max-w-2xl">
-            <div className="eyebrow mb-6">05 · Featured</div>
+            <div className="eyebrow mb-6">04 · Featured</div>
             <RevealText as="h2" className="display-2 block">
               Held. Not scrolled.
             </RevealText>
@@ -296,7 +251,6 @@ function FeaturedProducts({ onOpen }: { onOpen: (p: Product) => void }) {
         <div className="grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((p, i) => (
             <FadeUp key={p.id} delay={i * 0.05}>
-              {/* Static product card — inline since ProductCard expects DB shape */}
               <div
                 className="group cursor-pointer"
                 onClick={() => onOpen(p)}
@@ -350,7 +304,7 @@ function Outcomes() {
     <section id="outcomes" className="section-y bg-surface grain">
       <div className="container-x">
         <div className="max-w-3xl mb-16">
-          <div className="eyebrow mb-6">06 · Outcomes</div>
+          <div className="eyebrow mb-6">05 · Outcomes</div>
           <RevealText as="h2" className="display-2 block">
             What grows when the screens go dark.
           </RevealText>
@@ -379,7 +333,7 @@ function WhoWeServe() {
     <section id="who" className="section-y bg-background">
       <div className="container-x grid md:grid-cols-12 gap-12">
         <div className="md:col-span-4">
-          <div className="eyebrow mb-6">07 · Who we serve</div>
+          <div className="eyebrow mb-6">06 · Who we serve</div>
           <RevealText as="h2" className="display-2 block">
             Made for the grown-ups children trust.
           </RevealText>
@@ -430,7 +384,7 @@ function Testimonials() {
     <section ref={ref} className="section-y bg-foreground text-background grain overflow-hidden">
       <div className="container-x">
         <div className="max-w-3xl mb-16">
-          <div className="eyebrow mb-6" style={{ color: "rgba(255,255,255,0.6)" }}>08 · In their words</div>
+          <div className="eyebrow mb-6" style={{ color: "rgba(255,255,255,0.6)" }}>07 · In their words</div>
           <RevealText as="h2" className="display-2 block">
             Small notes from big lives.
           </RevealText>
@@ -464,7 +418,7 @@ function TestimonialCard({
       style={{ y: drift, rotate: i % 2 === 0 ? -1.5 : 1.5 }}
       className="shrink-0 w-[85vw] md:w-[420px] snap-center rounded-3xl bg-background/5 border border-background/10 backdrop-blur p-10"
     >
-      <div className="text-4xl text-accent font-display leading-none mb-6">“</div>
+      <div className="text-4xl text-accent font-display leading-none mb-6">"</div>
       <blockquote className="text-xl leading-relaxed text-background/90">{t.quote}</blockquote>
       <figcaption className="mt-8 text-sm text-background/60">
         <div className="text-background">{t.name}</div>
@@ -483,7 +437,7 @@ function FAQ() {
     <section id="faq" className="section-y bg-background">
       <div className="container-x grid md:grid-cols-12 gap-12">
         <div className="md:col-span-5">
-          <div className="eyebrow mb-6">09 · FAQ</div>
+          <div className="eyebrow mb-6">08 · FAQ</div>
           <RevealText as="h2" className="display-2 block max-w-sm">
             Things thoughtful parents ask.
           </RevealText>
@@ -532,7 +486,7 @@ function Contact() {
       <div className="container-x text-center relative">
         <FadeUp>
           <h2 className="display-1 max-w-[16ch] mx-auto">
-            Choose something they’ll <em className="text-accent">remember</em>.
+            Choose something they'll <em className="text-accent">remember</em>.
           </h2>
         </FadeUp>
         <FadeUp delay={0.3}>
