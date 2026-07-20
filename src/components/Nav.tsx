@@ -24,9 +24,8 @@ export function Nav() {
         {/* Primary navigation */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           {[
-            { to: "/", label: "Home" },
+            { to: "/",     label: "Home" },
             { to: "/drops", label: "Shop" },
-            { to: "/configurator", label: "Build a Kit" },
           ].map((l) => (
             <NavLink
               key={l.to}

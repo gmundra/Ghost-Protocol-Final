@@ -1,6 +1,4 @@
 // UNSCREEN — Shop / Drops page
-// Reuses Ghost Protocol product listing architecture.
-// Rebrand: "Drops" → "Shop", apparel → educational products.
 
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -33,7 +31,11 @@ export default function Drops() {
       let q = supabase
         .from("drops")
         .select("*")
-        .eq("published", true)
+        // Filter by status='live' — this is what the admin panel writes.
+        // (The legacy `published` boolean was never set by the admin and has
+        // been removed from this query to prevent products from disappearing.)
+        .eq("status", "live")
+        .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
       if (cat) q = q.eq("category", cat);
       const { data, error } = await q;

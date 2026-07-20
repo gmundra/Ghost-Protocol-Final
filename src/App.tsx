@@ -12,7 +12,6 @@ import Checkout from "./pages/Checkout";
 import OrderConfirmed from "./pages/OrderConfirmed";
 import Admin from "./pages/Admin";
 import SignalLost from "./pages/SignalLost";
-import Configurator from "./pages/Configurator";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +27,6 @@ const App = () => (
               <Route path="/" element={<Home />} />
               <Route path="/drops" element={<Drops />} />
               <Route path="/drop/:id" element={<DropDetail />} />
-              <Route path="/configurator" element={<Configurator />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-confirmed/:order" element={<OrderConfirmed />} />
               <Route path="/admin" element={<Admin />} />
