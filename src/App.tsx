@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SmoothScroll } from "./components/SmoothScroll";
@@ -18,30 +18,39 @@ import SignalLost from "./pages/SignalLost";
 
 const queryClient = new QueryClient();
 
+function Layout() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith("/admin");
+
+  return (
+    <SmoothScroll>
+      {!isAdmin && <Nav />}
+      <main className="min-h-screen">
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/drops" element={<Drops />} />
+          <Route path="/drop/:id" element={<DropDetail />} />
+          <Route path="/story" element={<Story />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmed/:order" element={<OrderConfirmed />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<SignalLost />} />
+        </Routes>
+      </main>
+      {!isAdmin && <Footer />}
+    </SmoothScroll>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <SmoothScroll>
-        <BrowserRouter>
-          <Nav />
-          <main className="min-h-screen">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/drops" element={<Drops />} />
-              <Route path="/drop/:id" element={<DropDetail />} />
-              <Route path="/story" element={<Story />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-confirmed/:order" element={<OrderConfirmed />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="*" element={<SignalLost />} />
-            </Routes>
-          </main>
-          <Footer />
-        </BrowserRouter>
-      </SmoothScroll>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
