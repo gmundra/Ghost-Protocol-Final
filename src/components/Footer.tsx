@@ -1,44 +1,87 @@
-// Ghost Protocol — Footer
-// Merged from the live Lovable file with three pending fixes applied:
-//   1. Divider: ✕ → ◈ (geometric signal marker — fits the tactical brand language)
-//   2. Email: contact@theghostprotocol.in → fits.ghost.protocol@gmail.com, with mailto:
-//   3. mt-32 → mt-16 (excessive top margin reduced)
-//   4. Added a Configurator nav link (was missing — Drops and Admin were the only links)
+// UNSCREEN — Footer
+// Warm ivory editorial footer. Earth tones, no neon.
 
-const PRODUCTION_EMAIL = "fits.ghost.protocol@gmail.com";
+const BRAND_EMAIL = "hello@unscreen.in";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border mt-16">
+    <footer className="border-t border-border mt-16 bg-surface">
+      {/* Scrolling brand tagline */}
       <div className="overflow-hidden border-b border-border">
-        <div className="flex animate-marquee whitespace-nowrap py-6 font-display text-3xl md:text-5xl tracking-[0.2em]">
+        <div className="flex animate-marquee whitespace-nowrap py-5 font-display text-2xl md:text-4xl tracking-wide text-muted-foreground">
           {Array.from({ length: 8 }).map((_, i) => (
-            <span key={i} className="px-8">
-              MOVE IN SILENCE <span className="text-primary">◈</span> THE GHOST PROTOCOL <span className="text-primary">◈</span>
+            <span key={i} className="px-10">
+              Learn Through Play{" "}
+              <span className="text-primary">◆</span>{" "}
+              UNSCREEN{" "}
+              <span className="text-accent">◆</span>{" "}
             </span>
           ))}
         </div>
       </div>
-      <div className="px-4 md:px-8 py-12 grid md:grid-cols-3 gap-8 text-sm tracking-wider">
-        <div>
-          <div className="font-display text-2xl tracking-[0.25em] mb-3">THE GHOST PROTOCOL</div>
-          <p className="text-muted-foreground">Jaipur, India. Drops from the underground.</p>
+
+      {/* Footer columns */}
+      <div className="px-4 md:px-10 py-14 grid md:grid-cols-4 gap-10 text-sm">
+        {/* Brand */}
+        <div className="md:col-span-1">
+          <div className="font-display text-xl tracking-wide mb-3">UNSCREEN</div>
+          <p className="text-muted-foreground leading-relaxed">
+            Helping children spend less time on screens and more time learning
+            through play, creativity, and imagination.
+          </p>
         </div>
+
+        {/* Shop */}
         <div>
-          <div className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-3">NAVIGATE</div>
-          <ul className="space-y-1">
-            <li><a href="/drops" className="hover:text-primary">All Drops</a></li>
-            <li><a href="/configurator" className="hover:text-primary">Configurator</a></li>
-            <li><a href="/admin" className="hover:text-primary">Admin</a></li>
+          <div className="text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-4">Shop</div>
+          <ul className="space-y-2 text-muted-foreground">
+            {[
+              ["Board Games", "/drops?cat=board-games"],
+              ["Wooden Toys",  "/drops?cat=wooden-toys"],
+              ["Flash Cards",  "/drops?cat=flash-cards"],
+              ["DIY Kits",     "/drops?cat=diy-kits"],
+              ["Books",        "/drops?cat=books"],
+            ].map(([label, href]) => (
+              <li key={label}>
+                <a href={href} className="hover:text-foreground transition-colors">{label}</a>
+              </li>
+            ))}
           </ul>
         </div>
+
+        {/* For */}
         <div>
-          <div className="font-display text-xs tracking-[0.3em] text-muted-foreground mb-3">SIGNAL</div>
-          <ul className="space-y-1 text-muted-foreground">
+          <div className="text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-4">For</div>
+          <ul className="space-y-2 text-muted-foreground">
+            {[
+              ["Parents",          "/drops?for=parents"],
+              ["Teachers",         "/drops?for=teachers"],
+              ["Schools",          "/drops?for=schools"],
+              ["Therapists",       "/drops?for=therapists"],
+              ["Gift Buyers",      "/drops?for=gifts"],
+            ].map(([label, href]) => (
+              <li key={label}>
+                <a href={href} className="hover:text-foreground transition-colors">{label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div>
+          <div className="text-xs font-semibold tracking-widest text-muted-foreground uppercase mb-4">Contact</div>
+          <ul className="space-y-2 text-muted-foreground">
             <li>
-              <a href={`mailto:${PRODUCTION_EMAIL}`} className="hover:text-primary">{PRODUCTION_EMAIL}</a>
+              <a href={`mailto:${BRAND_EMAIL}`} className="hover:text-foreground transition-colors">
+                {BRAND_EMAIL}
+              </a>
             </li>
-            <li>© {new Date().getFullYear()} — ALL RIGHTS WITHHELD.</li>
+            <li>
+              <a href="/admin" className="hover:text-foreground transition-colors">Admin</a>
+            </li>
+            <li className="pt-2">
+              © {new Date().getFullYear()} UNSCREEN. All rights reserved.
+            </li>
           </ul>
         </div>
       </div>

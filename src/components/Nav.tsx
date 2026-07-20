@@ -11,16 +11,22 @@ export function Nav() {
   if (onAdmin) return null;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="flex items-center justify-between px-4 md:px-8 h-14">
-        <Link to="/" className="font-display text-xl tracking-[0.25em] hover:text-primary transition-colors">
-          THE GHOST PROTOCOL
+    <header className="fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/90 backdrop-blur-md">
+      <div className="flex items-center justify-between px-4 md:px-10 h-16">
+        {/* Brand wordmark */}
+        <Link
+          to="/"
+          className="font-display text-xl tracking-wide text-foreground hover:text-primary transition-colors"
+        >
+          UNSCREEN
         </Link>
-        <nav className="hidden md:flex items-center gap-8 text-sm tracking-[0.25em] font-display">
+
+        {/* Primary navigation */}
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           {[
-            { to: "/", label: "HOME" },
-            { to: "/drops", label: "DROPS" },
-            { to: "/configurator", label: "FABRICATE" },
+            { to: "/", label: "Home" },
+            { to: "/drops", label: "Shop" },
+            { to: "/configurator", label: "Build a Kit" },
           ].map((l) => (
             <NavLink
               key={l.to}
@@ -28,8 +34,8 @@ export function Nav() {
               end
               className={({ isActive }) =>
                 cn(
-                  "hover:text-primary transition-colors",
-                  isActive && "text-primary",
+                  "text-muted-foreground hover:text-foreground transition-colors",
+                  isActive && "text-foreground font-semibold",
                 )
               }
             >
@@ -37,12 +43,18 @@ export function Nav() {
             </NavLink>
           ))}
         </nav>
+
+        {/* Cart */}
         <button
           onClick={open}
-          className="flex items-center gap-2 font-display tracking-widest text-sm hover:text-primary transition-colors"
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ShoppingBag size={18} />
-          <span className="tabular-nums">[{String(c).padStart(2, "0")}]</span>
+          {c > 0 && (
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs">
+              {c}
+            </span>
+          )}
         </button>
       </div>
     </header>

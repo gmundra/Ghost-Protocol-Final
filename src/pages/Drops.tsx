@@ -1,61 +1,119 @@
+// UNSCREEN — Shop / Drops page
+// Reuses Ghost Protocol product listing architecture.
+// Rebrand: "Drops" → "Shop", apparel → educational products.
+
+import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchDrops } from "@/lib/queries";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { formatINR } from "@/store/cart";
-import { GlitchText } from "@/components/GlitchText";
-import { SignedImage } from "@/components/SignedImage";
+import { supabase } from "@/integrations/supabase/client";
+import { useCart } from "@/store/cart";
+import { ShoppingBag } from "lucide-react";
+
+const CATEGORY_LABELS: Record<string, string> = {
+  "board-games":        "Board Games",
+  "wooden-toys":        "Wooden Toys",
+  "flash-cards":        "Flash Cards",
+  "diy-kits":           "DIY Kits",
+  "books":              "Books",
+  "conversation-cards": "Conversation Cards",
+  "bundles":            "Bundles",
+  "wooden-puzzles":     "Wooden Puzzles",
+  "educational-kits":   "Educational Kits",
+  "teacher-resources":  "Teacher Resources",
+};
 
 export default function Drops() {
-  const { data: drops = [], isLoading } = useQuery({ queryKey: ["drops"], queryFn: fetchDrops });
+  const [params] = useSearchParams();
+  const cat = params.get("cat") ?? "";
+  const forAudience = params.get("for") ?? "";
+  const { add } = useCart();
+
+  const { data: products = [], isLoading } = useQuery({
+    queryKey: ["products", cat, forAudience],
+    queryFn: async () => {
+      let q = supabase
+        .from("drops")
+        .select("*")
+        .eq("published", true)
+        .order("created_at", { ascending: false });
+      if (cat) q = q.eq("category", cat);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const pageTitle = cat
+    ? CATEGORY_LABELS[cat] ?? cat
+    : forAudience
+    ? `For ${forAudience.charAt(0).toUpperCase() + forAudience.slice(1)}`
+    : "All Products";
+
   return (
-    <div className="px-4 md:px-8 py-16 md:py-24">
-      <div className="mb-12 md:mb-20">
-        <div className="text-xs tracking-[0.4em] text-primary mb-3">// CATALOG</div>
-        <h1 className="font-display text-6xl md:text-9xl"><GlitchText>ALL DROPS</GlitchText></h1>
+    <main className="pt-16 min-h-screen">
+      <div className="px-6 md:px-16 py-14">
+        <h1 className="font-display text-3xl md:text-5xl text-foreground mb-2">{pageTitle}</h1>
+        <p className="text-muted-foreground text-sm mb-10">
+          {products.length > 0 ? `${products.length} products` : ""}
+        </p>
+
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-surface border border-border rounded animate-pulse h-64" />
+            ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-24 text-muted-foreground">
+            <p className="font-display text-2xl mb-2">Nothing here yet.</p>
+            <p className="text-sm">Check back soon — new products are added regularly.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((p: any) => (
+              <div key={p.id} className="group border border-border rounded overflow-hidden hover:border-primary transition-colors bg-background">
+                {/* Image */}
+                <div className="aspect-square bg-surface overflow-hidden">
+                  {p.image_url ? (
+                    <img
+                      src={p.image_url}
+                      alt={p.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-4xl">
+                      📦
+                    </div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="p-4">
+                  {p.category && (
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                      {CATEGORY_LABELS[p.category] ?? p.category}
+                    </p>
+                  )}
+                  <h3 className="font-display text-base text-foreground mb-1 leading-snug">{p.name}</h3>
+                  {p.age_group && (
+                    <p className="text-xs text-muted-foreground mb-2">Ages {p.age_group}</p>
+                  )}
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="font-semibold text-foreground text-sm">
+                      ₹{Number(p.price).toLocaleString("en-IN")}
+                    </span>
+                    <button
+                      onClick={() => add({ id: p.id, name: p.name, price: p.price, image: p.image_url })}
+                      className="flex items-center gap-1.5 bg-primary text-primary-foreground px-3 py-1.5 rounded text-xs font-medium hover:opacity-90 transition-opacity"
+                    >
+                      <ShoppingBag size={12} /> Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      {isLoading ? (
-        <div className="text-muted-foreground tracking-widest">// LOADING SIGNAL...</div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
-          {drops.map((d, i) => (
-            <motion.div
-              key={d.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
-            >
-              <Link to={`/drop/${d.slug}`} className="group block relative aspect-[3/4] bg-secondary overflow-hidden">
-                {d.cover_image && (
-                  <SignedImage
-                    path={d.cover_image}
-                    alt={d.name}
-                    debugLabel={`Drops:${d.slug}`}
-                    className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-all duration-700"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent" />
-                <div className="absolute top-4 left-4 text-xs tracking-[0.3em] text-primary border border-primary px-2 py-0.5">
-                  DROP/{String(d.drop_number ?? 0).padStart(3, "0")}
-                </div>
-                {d.status !== "live" && (
-                  <div className="absolute top-4 right-4 text-xs tracking-[0.3em] border border-foreground px-2 py-0.5">
-                    {d.status === "sold_out" ? "SOLD OUT" : "ARCHIVED"}
-                  </div>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <div className="font-display text-2xl mb-1">{d.name}</div>
-                  <div className="flex justify-between text-sm tracking-widest text-muted-foreground">
-                    <span>{formatINR(d.price)}</span>
-                    <span className="group-hover:text-primary">VIEW →</span>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      )}
-    </div>
+    </main>
   );
 }

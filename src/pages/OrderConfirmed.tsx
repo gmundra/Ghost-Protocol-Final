@@ -1,22 +1,26 @@
-import { useParams, Link } from "react-router-dom";
-import { GlitchText } from "@/components/GlitchText";
+// UNSCREEN — Order Confirmed page
+import { Link } from "react-router-dom";
+import { CheckCircle } from "lucide-react";
 
 export default function OrderConfirmed() {
-  const { order } = useParams();
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 text-center">
-      <div>
-        <div className="text-xs tracking-[0.4em] text-primary mb-4 animate-flicker">// TRANSMISSION COMPLETE</div>
-        <h1 className="font-display text-7xl md:text-9xl mb-6"><GlitchText>ORDER CONFIRMED.</GlitchText></h1>
-        <p className="text-muted-foreground tracking-[0.3em] mb-2">REFERENCE</p>
-        <p className="font-display text-2xl mb-10">{order}</p>
-        <p className="text-muted-foreground tracking-widest max-w-md mx-auto mb-10">
-          Check your inbox for tracking. The signal will reach you in 5–7 days.
+    <main className="pt-16 min-h-screen flex items-center justify-center px-6">
+      <div className="max-w-md w-full text-center py-20">
+        <CheckCircle className="mx-auto mb-6 text-primary" size={52} strokeWidth={1.5} />
+        <h1 className="font-display text-3xl md:text-4xl text-foreground mb-4">
+          Order Confirmed!
+        </h1>
+        <p className="text-muted-foreground leading-relaxed mb-8">
+          Thank you for your purchase. We'll send a confirmation to your email shortly.
+          Your child is going to love this.
         </p>
-        <Link to="/drops" className="inline-block border border-foreground px-8 py-4 font-display tracking-[0.25em] hover:bg-primary hover:border-primary hover:text-primary-foreground transition-colors">
-          CONTINUE BROWSING
+        <Link
+          to="/drops"
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3 rounded text-sm font-medium hover:opacity-90 transition-opacity"
+        >
+          Continue Shopping
         </Link>
       </div>
-    </div>
+    </main>
   );
 }

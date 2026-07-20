@@ -19,6 +19,7 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: "hsl(var(--surface))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -57,6 +58,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // UNSCREEN brand palette — direct hex tokens
+        unscreen: {
+          ivory:      "#F7F4ED",
+          surface:    "#EFE8DC",
+          charcoal:   "#2E2A26",
+          secondary:  "#6F675E",
+          border:     "#DDD4C7",
+          green:      "#6B7A4F",
+          terracotta: "#B86A4A",
+          mustard:    "#C9A24A",
+          blue:       "#6E8CA0",
+          sage:       "#A7B59A",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,23 +79,21 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
-        "fade-in": { "0%": { opacity: "0", transform: "translateY(8px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
-        "fade-up": { "0%": { opacity: "0", transform: "translateY(24px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+        "fade-in": {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(24px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -90,8 +102,8 @@ export default {
         "fade-up": "fade-up 0.7s ease-out",
       },
       fontFamily: {
-        display: ["'Bebas Neue'", "'Barlow Condensed'", "sans-serif"],
-        sans: ["'Barlow Condensed'", "system-ui", "sans-serif"],
+        display: ["'Lora'", "Georgia", "serif"],
+        sans: ["'DM Sans'", "system-ui", "sans-serif"],
       },
     },
   },
